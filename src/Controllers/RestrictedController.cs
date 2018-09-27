@@ -120,6 +120,34 @@ namespace SQ7MRU.QSOCollector.Controllers
             return Ok(station);
         }
 
+        /// <summary>
+        /// Force Delete Station Item
+        ///
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        // DELETE: restricted/stations/1/force
+        [HttpDelete("stations/{stationId}/force")]
+        public async Task<IActionResult> ForceDeleteStation([FromRoute] int stationId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var station = await _context.Station.FindAsync(stationId);
+            if (station == null)
+            {
+                return NotFound();
+            }
+
+            station.Log = null;
+            _context.Station.Remove(station);
+            await _context.SaveChangesAsync();
+
+            return Ok(station);
+        }
+
         private bool StationExists(int stationId)
         {
             return _context.Station.Any(e => e.StationId == stationId);
