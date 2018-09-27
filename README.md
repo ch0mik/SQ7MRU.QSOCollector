@@ -4,7 +4,7 @@ Service for Collect and Manage QSOs (ADIF Records)
 ## Public API
 
 #### GET Stations 
-GET /api/stations/
+GET /api/stations
 
 #### Get Stations Info
 GET /api/station/{id}
