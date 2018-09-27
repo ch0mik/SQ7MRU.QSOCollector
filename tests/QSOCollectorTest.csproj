@@ -20,4 +20,10 @@
     <ProjectReference Include="..\src\SQ7MRU.QSOCollector.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Sample.ADIF">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>

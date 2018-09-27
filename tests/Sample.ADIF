@@ -1,0 +1,17 @@
+﻿<ADIF_VERS:3>2.2
+<PROGRAMID:5>Dummy
+<PROGRAMVERSION:6>V1.2.3
+<EOH>
+
+<band:3>20m <call:6>XY1ABC <cont:2>EU <country:12>ACME Country  
+<cqz:2>14 <distance:3>0.0 <dxcc:3>230 <eqsl_qslrdate:8>20170923 <eqsl_qsl_rcvd:1>Y <eqsl_qsl_sent:1>N 
+<force_init:1>0 <freq:9>14.079060 <gridsquare:6>JO53iu <ituz:2>28 <lotw_qslsdate:8>20170923 <lotw_qsl_rcvd:1>N <lotw_qsl_sent:1>Y 
+<mode:5>PSK31 <name:6>Sample <pfx:3>XY1 <qsl_rcvd:1>N <qsl_sent:1>N 
+<qso_complete:1>Y <qth:7>Luebeck <rst_rcvd:3>579 <rst_sent:3>599 <rx_pwr:3>0.0 <sfi:3>0.0 
+<swl:1>0 <time_off:6>180351 <time_on:6>180044 <qso_date:8>20170618 <EOR>
+
+<band:3>20m <call:6>XX1ABC <cont:2>EU <country:12>TV Country  
+<cqz:2>16 <dxcc:2>54 <eqsl_qsl_rcvd:1>N <eqsl_qsl_sent:1>N <force_init:1>0 <freq:9>14.070010 
+<ituz:2>19 <lotw_qslsdate:8>20170923 <lotw_qsl_rcvd:1>N <lotw_qsl_sent:1>Y <mode:5>PSK31 <pfx:3>XX1 
+<qsl_rcvd:1>N <qsl_sent:1>N <qso_complete:1>Y <rst_rcvd:3>599 <rst_sent:3>599 <rx_pwr:3>0.0 
+<sfi:3>0.0 <swl:1>0 <time_off:6>175706 <time_on:6>175320 <qso_date:8>20170618 <EOR>
