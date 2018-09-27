@@ -1,9 +1,8 @@
 # SQ7MRU.QSOCollector
 Service for Collect and Manage QSOs (ADIF Records)
 
-
-
-## Public API
+<details>
+<summary>Public API</summary>
 
 #### GET Stations 
 GET /api/stations
@@ -17,9 +16,11 @@ GET /api/stations/{stationId}/log
 #### Get Station Log Item 
 GET /api/stations/{stationId}/log/{qsoId}
 
+</details>
 
 
-## Restriction API
+<details>
+<summary>Restriction API</summary>
 
 #### Insert Station's Item 
 POST /restriction/station
@@ -51,4 +52,5 @@ return updated Item or Error
 DELETE /restriction/station/{id}/log/{id}
 return true/false
 
+</details>
 
