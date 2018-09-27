@@ -25,20 +25,20 @@ return inserted Item or Error
 PUT /restriction/station/{id}
 return updated Item or Error
 
-#### Delete Station Log Item
+#### Delete Station Item
 DELETE /restriction/station/{id}
 DELETE /restriction/station/{id}/force - recursive delete
 return true/false
 
-#### Insert Station Log Item
+#### Insert Station's Log Item
 POST /restriction/station/{id}/log
 return inserted Item or Error
 
-#### Update Station Log Item
+#### Update Station's Log Item
 PUT /restriction/station/{id}/log/{id}
 return updated Item or Error
 
-#### Delete Station Log Item
+#### Delete Station's Log Item
 DELETE /restriction/station/{id}/log/{id}
 return true/false
 
