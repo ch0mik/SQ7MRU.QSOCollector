@@ -6,7 +6,7 @@ Service for Collect and Manage QSOs (ADIF Records)
 #### GET Stations 
 GET /api/stations
 
-#### Get Stations Info
+#### Get Station Info
 GET /api/station/{id}
 
 #### Get Stations Logs
