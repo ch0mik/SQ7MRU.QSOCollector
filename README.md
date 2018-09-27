@@ -3,13 +3,13 @@ Service for Collect and Manage QSOs (ADIF Records)
 
 ## Public API
 <br/>
-#### GET Stations <br/>
+#### GET Stations 
 GET /api/stations<br/>
 <br/>
-#### Get Station Info <br/>
+#### Get Station Info
 GET /api/stations/{stationId}<br/>
 <br/>
-#### Get Stations Logs <br/>
+#### Get Stations Logs 
 GET /api/stations/{stationId}/log<br/>
 <br/>
 #### Get Station Log Item <br/>
