@@ -21,7 +21,7 @@ namespace SQ7MRU.QSOCollector.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: api/stations
-        [HttpGet("/stations")]
+        [HttpGet("stations")]
         public IEnumerable<Station> GetStation()
         {
             return _context.Station;
@@ -33,7 +33,7 @@ namespace SQ7MRU.QSOCollector.Controllers
         /// <param name="stationId"></param>
         /// <returns></returns>
         // GET: api/stations/1
-        [HttpGet("/stations/{stationId}")]
+        [HttpGet("stations/{stationId}")]
         public async Task<IActionResult> GetStation([FromRoute] int stationId)
         {
             if (!ModelState.IsValid)
@@ -56,7 +56,7 @@ namespace SQ7MRU.QSOCollector.Controllers
         /// </summary>
         /// <returns></returns>
         // GET: api/station/1/log
-        [HttpGet("/stations/{stationId}/log")]
+        [HttpGet("stations/{stationId}/log")]
         public IEnumerable<Qso> GetLog()
         {
             return _context.Log;
@@ -69,7 +69,7 @@ namespace SQ7MRU.QSOCollector.Controllers
         /// <param name="qsoId"></param>
         /// <returns></returns>
         // GET: api/station/1/log/1
-        [HttpGet("/stations/{stationId}/log/{qsoId}")]
+        [HttpGet("stations/{stationId}/log/{qsoId}")]
         public async Task<IActionResult> GetQso([FromRoute] int stationId, int qsoId)
         {
             if (!ModelState.IsValid)
