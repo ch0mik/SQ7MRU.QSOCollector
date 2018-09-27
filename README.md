@@ -36,10 +36,10 @@ return inserted Item or Error
 
 #### Insert Station's Log Item from Adif Record
 POST /restricted/stations/{stationId}/insert/adif/{minutesAccept}
-return inserted Item or Error
-optional parameter :  int minutesAccept, default = 10 
-                      checks duplicates into Station's Log
-
+return inserted Item or Error<br/>
+optional parameter :  <br/>
+               * int minutesAccept, default = 10 (checks duplicates into Station's Log) <br/>
+                      
 #### Update Station's Log Item
 PUT /restricted/stations/{stationId}/log/{qsoId}
 return updated Item or Error
