@@ -7,35 +7,41 @@ Service for Collect and Manage QSOs (ADIF Records)
 GET /api/stations
 
 #### Get Station Info
-GET /api/station/{id}
+GET /api/stations/{stationId}
 
 #### Get Stations Logs
-GET /api/station/{id}/log
+GET /api/stations/{stationId}/log
 
 #### Get Station Log Item
-GET /api/station/{id}/log/{id}
+GET /api/stations/{stationId}/log/{qsoId}
 
 ## Restriction API
 
-#### Insert Station Item
+#### Insert Station's Item
 POST /restriction/station
 return inserted Item or Error
 
-#### Update Station Item
-PUT /restriction/station/{id}
+#### Update Station's Item
+PUT /restricted/stations/{stationId}
 return updated Item or Error
 
-#### Delete Station Item
-DELETE /restriction/station/{id}
-DELETE /restriction/station/{id}/force - recursive delete
+#### Delete Station's Item
+DELETE /restricted/stations/{stationId}
+DELETE /restricted/stations/{stationId}/force - recursive delete
 return true/false
 
 #### Insert Station's Log Item
-POST /restriction/station/{id}/log
+POST /restricted/stations/{stationId}/insert/qso
 return inserted Item or Error
 
+#### Insert Station's Log Item from Adif Record
+POST /restricted/stations/{stationId}/insert/adif/{minutesAccept}
+return inserted Item or Error
+optional parameter :  int minutesAccept, default = 10 
+                      checks duplicates into Station's Log
+
 #### Update Station's Log Item
-PUT /restriction/station/{id}/log/{id}
+PUT /restricted/stations/{stationId}/log/{qsoId}
 return updated Item or Error
 
 #### Delete Station's Log Item
