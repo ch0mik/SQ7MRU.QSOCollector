@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 
@@ -15,11 +16,13 @@ namespace SQ7MRU.QSOCollector
         private IHostingEnvironment _env;
         private string AppName;
         private string AppVer;
+        private ILoggerFactory _loggerFactory;
 
-        public Startup(IConfiguration configuration, IHostingEnvironment env)
+        public Startup(IConfiguration configuration, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             Configuration = configuration;
             _env = env;
+            _loggerFactory = loggerFactory;
             AppName = Assembly.GetEntryAssembly().GetName().Name;
             AppVer = Assembly.GetEntryAssembly().GetName().Version.ToString(3);
         }
@@ -38,7 +41,9 @@ namespace SQ7MRU.QSOCollector
                 {
                     c.SwaggerDoc("v1", new Info
                     {
-                        Title = AppName, Version = AppVer, Description = "Service for Collect and Manage QSOs (ADIF Records)",
+                        Title = AppName,
+                        Version = AppVer,
+                        Description = "Service for Collect and Manage QSOs (ADIF Records)",
                         Contact = new Contact() { Url = "https://github.com/ch0mik/SQ7MRU.QSOCollector", Name = "SQ7MRU.QSOCollector" },
                         License = new License() { Url = "https://github.com/ch0mik/SQ7MRU.QSOCollector/blob/master/LICENSE", Name = "Apache License v2.0" }
                     });
@@ -70,8 +75,8 @@ namespace SQ7MRU.QSOCollector
                 app.UseSwaggerUI(c =>
                 {
                     c.SwaggerEndpoint("/swagger/v1/swagger.json", $"{AppName} V{AppVer}");
+                    c.DocExpansion(DocExpansion.None);
                 });
-                
             }
 
             app.UseHsts();

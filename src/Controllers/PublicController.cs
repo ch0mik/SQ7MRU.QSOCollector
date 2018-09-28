@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -10,10 +11,12 @@ namespace SQ7MRU.QSOCollector.Controllers
     public class PublicController : ControllerBase
     {
         private readonly QSOColletorContext _context;
+        private readonly ILogger _logger;
 
-        public PublicController(QSOColletorContext context)
+        public PublicController(QSOColletorContext context, ILogger<PublicController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         /// <summary>
@@ -70,7 +73,7 @@ namespace SQ7MRU.QSOCollector.Controllers
         /// <returns></returns>
         // GET: api/station/1/log/1
         [HttpGet("stations/{stationId}/log/{qsoId}")]
-        public async Task<IActionResult> GetQso([FromRoute] int stationId, int qsoId)
+        public IActionResult GetQso([FromRoute] int stationId, int qsoId)
         {
             if (!ModelState.IsValid)
             {

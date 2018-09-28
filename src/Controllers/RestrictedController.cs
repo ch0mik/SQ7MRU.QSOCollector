@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using SQ7MRU.QSOCollector.Helpers;
 using SQ7MRU.Utils;
 using System;
@@ -14,10 +15,12 @@ namespace SQ7MRU.QSOCollector.Controllers
     public class RestrictedController : ControllerBase
     {
         private readonly QSOColletorContext _context;
+        private readonly ILogger _logger;
 
-        public RestrictedController(QSOColletorContext context)
+        public RestrictedController(QSOColletorContext context, ILogger<RestrictedController> logger)
         {
             _context = context;
+            _logger = logger;
         }
 
         #region Station
@@ -212,18 +215,27 @@ namespace SQ7MRU.QSOCollector.Controllers
             }
             else
             {
-                Station station = _context.Station.Find(stationId);
-                Qso[] duplicates = _context.SearchDuplicates(station, adifRow, minutesAccept) ?? new Qso[0];
-                if (duplicates.Length > 0)
+                try
                 {
-                    return CreatedAtAction("GetQso", "Public", new { id = duplicates.First().QsoId }, duplicates.First());
+                    Station station = _context.Station.Find(stationId);
+                    Qso[] duplicates = _context.SearchDuplicates(station, adifRow, minutesAccept) ?? new Qso[0];
+                    if (duplicates.Length > 0)
+                    {
+                        var duplicateQso = duplicates.First();
+                        return RedirectToAction("GetQso", "Public", new {duplicateQso.StationId,  duplicateQso.QsoId });
+                    }
+                    else
+                    {
+                        Qso qso = Converters.Convert(adifRow, station);
+                        _context.Log.Add(qso);
+                        await _context.SaveChangesAsync();
+                        return CreatedAtAction("GetQso", "Public", new { stationId = qso.StationId, id = qso.QsoId }, qso);
+                    }
                 }
-                else
+                catch(Exception exc)
                 {
-                    Qso qso = Converters.Convert(adifRow, station);
-                    _context.Log.Add(qso);
-                    await _context.SaveChangesAsync();
-                    return CreatedAtAction("GetQso", "Public", new { id = qso.QsoId }, qso);
+                    _logger.LogError(exc.Message, null);
+                    return BadRequest(exc.Message);
                 }
             }
         }
