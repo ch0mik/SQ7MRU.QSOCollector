@@ -14,7 +14,6 @@ namespace SQ7MRU.QSOCollector
         public string QTH { get; set; }
         public string Locator { get; set; }
         public string Operator { get; set; }
-        public int? EqslCcHamId { get; set; }
         public virtual  List<Qso> Log { get; set; }
 
     }

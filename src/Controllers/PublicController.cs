@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,7 @@ using System.Threading.Tasks;
 namespace SQ7MRU.QSOCollector.Controllers
 {
     [Route("api")]
+    [AllowAnonymous]
     [ApiController]
     public class PublicController : ControllerBase
     {
