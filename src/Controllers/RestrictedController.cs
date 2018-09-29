@@ -229,7 +229,7 @@ namespace SQ7MRU.QSOCollector.Controllers
                         Qso qso = Converters.Convert(adifRow, station);
                         _context.Log.Add(qso);
                         await _context.SaveChangesAsync();
-                        return CreatedAtAction("GetQso", "Public", new { stationId = qso.StationId, id = qso.QsoId }, qso);
+                        return CreatedAtRoute(new { id = qso.QsoId }, qso);
                     }
                 }
                 catch(Exception exc)
