@@ -39,14 +39,10 @@ namespace SQ7MRU.QSOCollector.Controllers
                 return BadRequest(ModelState);
             }
 
-            if (station.StationId > 0 && StationExists(station.StationId))
-            {
-                return BadRequest("Station Exists");
-            }
-
             if (StationExists(station.StationId))
             {
-                throw new Exception("Station Exist");
+
+                return RedirectToAction("GetStation", "Public", new { station.StationId });
             }
             else
             {
