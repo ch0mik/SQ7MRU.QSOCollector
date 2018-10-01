@@ -1,10 +1,11 @@
 ﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using SQ7MRU.QSOCollector.Services.EQSL;
 using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
 
@@ -64,6 +65,9 @@ namespace SQ7MRU.QSOCollector
             //Sqlite + LazyLoading
             //https://docs.microsoft.com/en-us/ef/core/querying/related-data + http://ralms.net/efcore/lazyload/
             //services.AddDbContext<QSOColletorContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
+
+            //EQSL.CC Job Service
+            services.AddSingleton<IHostedService, EqslService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
