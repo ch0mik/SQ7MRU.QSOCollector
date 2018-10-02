@@ -67,7 +67,8 @@ namespace SQ7MRU.QSOCollector
             //services.AddDbContext<QSOColletorContext>(options => options.UseSqlite(Configuration.GetConnectionString("DefaultConnection")).UseLazyLoadingProxies());
 
             //EQSL.CC Job Service
-            services.AddSingleton<IHostedService, EqslService>();
+            services.AddSingleton<IHostedService, EqslUploadService>();
+            services.AddSingleton<IHostedService, EqslDownloadService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

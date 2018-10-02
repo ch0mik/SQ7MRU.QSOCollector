@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace SQ7MRU.QSOCollector.Services.EQSL
 {
-    public class EqslService : BackgroundService
+    public class EqslUploadService : BackgroundService
     {
-        private readonly ILogger<EqslService> _logger;
+        private readonly ILogger<EqslUploadService> _logger;
         private readonly IServiceProvider _provider;
         private readonly Config _config;
 
-        public EqslService(ILogger<EqslService> logger, IServiceProvider serviceProvider, IConfiguration configuration)
+        public EqslUploadService(ILogger<EqslUploadService> logger, IServiceProvider serviceProvider, IConfiguration configuration)
         {
             _logger = logger;
             _provider = serviceProvider;
@@ -25,14 +25,14 @@ namespace SQ7MRU.QSOCollector.Services.EQSL
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogDebug($"{nameof(EqslService)} is starting.");
+            _logger.LogDebug($"{nameof(EqslUploadService)} is starting.");
 
             stoppingToken.Register(() =>
-                    _logger.LogDebug($"{nameof(EqslService)} background task is stopping."));
+                    _logger.LogDebug($"{nameof(EqslUploadService)} background task is stopping."));
 
             while (!stoppingToken.IsCancellationRequested)
             {
-                _logger.LogDebug($"{nameof(EqslService)} task doing background work.");
+                _logger.LogDebug($"{nameof(EqslUploadService)} task doing background work.");
 
                 using (IServiceScope scope = _provider.CreateScope())
                 {
@@ -44,9 +44,8 @@ namespace SQ7MRU.QSOCollector.Services.EQSL
                             {
                                 var QsosToSend = context.Log.Where(Q => Q.StationId == station.StationId && Q.EQSL_QSL_SENT == "N").ToArray();
                                 var adif = AdifHelper.ExportAsADIF(QsosToSend);
-                                var c = new Client(_config);
-                                c.Logon(station.Callsign, station.HamID);
-                                if (c.UploadAdif(adif))
+                                var c = new Uploader();
+                                if (c.UploadAdif(adif, station.Callsign, station.HamID))
                                 {
                                     //update QSOs
                                     foreach (Qso qso in QsosToSend)
@@ -67,7 +66,7 @@ namespace SQ7MRU.QSOCollector.Services.EQSL
                 await Task.Delay(new TimeSpan(_config.JobInterval, 0, 0));
             }
 
-            _logger.LogDebug($"{nameof(EqslService)} background task is stopping.");
+            _logger.LogDebug($"{nameof(EqslUploadService)} background task is stopping.");
         }
     }
 }
