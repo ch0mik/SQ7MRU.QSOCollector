@@ -1,9 +1,16 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using SQ7MRU.Utils;
 using System.Collections.Generic;
+using System;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
+using System.Net.Mime;
+using System.IO;
+using System.Text;
 
 namespace SQ7MRU.QSOCollector.Controllers
 {
@@ -62,9 +69,32 @@ namespace SQ7MRU.QSOCollector.Controllers
         /// <returns></returns>
         // GET: api/station/1/log
         [HttpGet("stations/{stationId}/log")]
-        public IEnumerable<Qso> GetLog()
+        public IEnumerable<Qso> GetLog(int stationId)
         {
-            return _context.Log;
+            return _context.Log.Where(Q => Q.StationId == stationId)?.ToArray();
+        }
+
+        /// <summary>
+        /// Get Station`s Logs
+        /// </summary>
+        /// <returns></returns>
+        // GET: api/station/1/log
+        [HttpGet("stations/{stationId}/export")]
+        public ContentResult ExportLog(int stationId)
+        {
+            var station = _context.Station.Where(S => S.StationId == stationId).First<Station>();
+            if (station != null)
+            {
+                return new ContentResult() {
+                    Content = AdifHelper.ExportAsADIF(_context.Log.Where(Q => Q.StationId == stationId)?.ToArray<AdifRow>()),
+                    ContentType = MediaTypeNames.Text.Plain,
+                    StatusCode = 200 };
+            }
+            else
+            {
+                return new ContentResult() { StatusCode = 404 };
+            }
+            
         }
 
         /// <summary>
