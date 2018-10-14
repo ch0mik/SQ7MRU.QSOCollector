@@ -80,6 +80,7 @@ namespace SQ7MRU.QSOCollector.Controllers
         /// <returns></returns>
         // GET: api/station/1/log
         [HttpGet("stations/{stationId}/export")]
+        [Produces("text/plain")]
         public ContentResult ExportLog(int stationId)
         {
             var station = _context.Station.Where(S => S.StationId == stationId).First<Station>();
@@ -87,7 +88,6 @@ namespace SQ7MRU.QSOCollector.Controllers
             {
                 return new ContentResult() {
                     Content = AdifHelper.ExportAsADIF(_context.Log.Where(Q => Q.StationId == stationId)?.ToArray<AdifRow>()),
-                    ContentType = MediaTypeNames.Text.Plain,
                     StatusCode = 200 };
             }
             else
