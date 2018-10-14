@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\src\SQ7MRU.QSOCollector.csproj" />
+    <ProjectReference Include="..\src\QSOCollector\SQ7MRU.QSOCollector.csproj" />
   </ItemGroup>
 
   <ItemGroup>

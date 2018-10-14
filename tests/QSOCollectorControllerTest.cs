@@ -14,6 +14,7 @@ namespace SQ7MRU.QSOCollector.Tests
     public class QSOCollectorTest
     {
         private static QSOColletorContext _context;
+        private static ILoggerFactory _loggerFactory;
 
         #region Init
 
@@ -22,7 +23,9 @@ namespace SQ7MRU.QSOCollector.Tests
         {
             var builder = new DbContextOptionsBuilder<QSOColletorContext>().UseInMemoryDatabase("QSOCollector");
 
-            var context = new QSOColletorContext(builder.Options, new LoggerFactory());
+            _loggerFactory = new LoggerFactory();
+
+            var context = new QSOColletorContext(builder.Options, _loggerFactory);
 
             var stations = Enumerable.Range(1, 3)
                 .Select(i => new Station() { StationId = i, Callsign = "SQ7MRU", Locator = "JO91vr", Operator = "Pawel", QTH = "Koluszki", Name = $"Koluszki #{i}" });
@@ -50,7 +53,7 @@ namespace SQ7MRU.QSOCollector.Tests
         [TestMethod]
         public void TestGetAllStations()
         {
-            var controller = new PublicController(_context);
+            var controller = new PublicController(_context, _loggerFactory.CreateLogger<PublicController>());
             var result = controller.GetStation();
             Assert.IsTrue(result.Count() == 3);
         }
@@ -59,7 +62,7 @@ namespace SQ7MRU.QSOCollector.Tests
         public async System.Threading.Tasks.Task TestGetStationByIdAsync()
         {
             string expectedName = "Koluszki #2";
-            var controller = new PublicController(_context);
+            var controller = new PublicController(_context, _loggerFactory.CreateLogger<PublicController>());
             var result = await controller.GetStation(2) as OkObjectResult;
             if (result?.Value as Station != null)
             {

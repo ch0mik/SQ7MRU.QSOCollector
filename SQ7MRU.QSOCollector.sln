@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2036
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQ7MRU.QSOCollector", "src\SQ7MRU.QSOCollector.csproj", "{C60C52BD-12A1-4080-BF2B-BD30345BE6BC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQ7MRU.QSOCollector", "src\QSOCollector\SQ7MRU.QSOCollector.csproj", "{C60C52BD-12A1-4080-BF2B-BD30345BE6BC}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "QSOCollectorTest", "tests\QSOCollectorTest.csproj", "{A441871B-E934-4F0E-8B84-6371AC68AE8C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQ7MRU.FLLog", "fllog\SQ7MRU.FLLog.csproj", "{08CC49B0-5DCC-47BE-9461-CCE5EC0AFD8B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SQ7MRU.FLLog", "src\FLLog\SQ7MRU.FLLog.csproj", "{08CC49B0-5DCC-47BE-9461-CCE5EC0AFD8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
