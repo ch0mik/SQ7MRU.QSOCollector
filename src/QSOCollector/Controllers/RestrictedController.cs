@@ -2,9 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using SQ7MRU.FlLog.Requests;
 using SQ7MRU.QSOCollector.Helpers;
 using SQ7MRU.Utils;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -305,5 +307,24 @@ namespace SQ7MRU.QSOCollector.Controllers
         }
 
         #endregion Log
+
+        #region FlLog
+
+
+        /// <summary>
+        /// Check duplicates
+        /// </summary>
+        /// <returns></returns>
+        // POST: restricted/stations/1/check_dup
+        [HttpPost("stations/{stationId}/check_dup")]
+        public bool CheckDuplicates([FromRoute] int stationId, [FromBody] CheckDupRequest checkDupRequest)
+        {
+            Station station = _context.Station.Find(stationId);
+            Qso[] duplicates = _context.SearchDuplicates(station, Converters.CheckDupToAdif(checkDupRequest), checkDupRequest?.TimeSpan ?? 1 ) ?? new Qso[0];
+            return (duplicates.Length > 0);
+        }
+
+        #endregion
+
     }
 }

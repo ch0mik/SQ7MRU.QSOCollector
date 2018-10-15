@@ -21,7 +21,9 @@ namespace SQ7MRU.FLLog.Controllers
 
                     switch (call.methodName)
                     {
+                        #region system.listMethods
                         case "system.listMethods":
+                        #endregion
                             {
                                 return new ContentResult()
                                 {
@@ -55,6 +57,7 @@ namespace SQ7MRU.FLLog.Controllers
                                 };
                             }
 
+                        #region system.methodHelp
                         case "system.methodHelp":
                             {
                                 switch (call.@params?.First().value)
@@ -150,6 +153,24 @@ namespace SQ7MRU.FLLog.Controllers
                                         return null;
                                 }
                             }
+                        #endregion
+
+                        #region log.check_dup
+                        ///"log.check_dup CALL, MODE(0), TIME_SPAN(0), FREQ_HZ(0), STATE(0), XCHG_IN(0)"
+                        case "log.check_dup":
+                         {
+                                
+                                string _call = call.@params[0].value;
+
+                                return new ContentResult()
+                                {
+                                    //ToDo : Make Client to QSO Collector
+                                    Content = "ToDo",
+                                    ContentType = MediaTypeNames.Text.Xml,
+                                    StatusCode = 200
+                                };
+                            }
+                        #endregion
 
                         default:
                             return null;

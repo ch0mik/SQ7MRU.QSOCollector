@@ -11,4 +11,14 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="2.1.1" />
   </ItemGroup>
 
+
+  <ItemGroup>
+    <Folder Include="Client\" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\Libs\SQ7MRU.FlLog.Requests\SQ7MRU.FlLog.Requests.csproj" />
+  </ItemGroup>
+
 </Project>
