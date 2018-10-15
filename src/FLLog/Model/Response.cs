@@ -7,7 +7,7 @@ namespace SQ7MRU.FLLog.Model
     public class Data
     {
         [XmlElement(ElementName = "value")]
-        public List<string> Value { get; set; }
+        public string[] Value { get; set; }
     }
 
     [XmlRoot(ElementName = "array")]
@@ -39,9 +39,7 @@ namespace SQ7MRU.FLLog.Model
     }
 
 
-    //[XmlRoot(ElementName = "methodResponse")]
-    [System.SerializableAttribute()]
-    [System.Xml.Serialization.XmlTypeAttribute(AnonymousType = true, TypeName = "methodResponse")]
+    [XmlRoot(ElementName = "methodResponse")]
     public class MethodResponse
     {
         [XmlElement(ElementName = "params")]

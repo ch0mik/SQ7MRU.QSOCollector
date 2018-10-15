@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.IO;
+using System.Text;
 using System.Xml.Serialization;
 
 namespace SQ7MRU.FLLog.Controllers
 {
     public static class XmlHelper
     {
-        public static T XmlDeserializeFromString<T>(string objectData)
+        public static T DeserializeFromString<T>(string objectData)
         {
             var serializer = new XmlSerializer(typeof(T));
 
@@ -19,5 +16,21 @@ namespace SQ7MRU.FLLog.Controllers
             }
         }
 
+        public static string SerializeObject<T>(this T toSerialize)
+        {
+            var xmlSerializer = new XmlSerializer(toSerialize.GetType());
+
+            using (StringWriter textWriter = new Utf8StringWriter())
+            {
+                xmlSerializer.Serialize(textWriter, toSerialize);
+
+                return textWriter.ToString();
+            }
+        }
+
+        public class Utf8StringWriter : StringWriter
+        {
+            public override Encoding Encoding { get { return Encoding.Default; } }
+        }
     }
 }

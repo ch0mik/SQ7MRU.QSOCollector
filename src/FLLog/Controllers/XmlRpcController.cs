@@ -3,6 +3,7 @@ using SQ7MRU.FLLog.Model;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 
 namespace SQ7MRU.FLLog.Controllers
 {
@@ -10,46 +11,47 @@ namespace SQ7MRU.FLLog.Controllers
     public class XmlRpcController : ControllerBase
     {
         [HttpPost]
-        [Produces("text/xml")]
-        [ResponseCache(NoStore = true)]
-        public MethodResponse Post()
+        public ContentResult Post()
         {
-
             using (var receiveStream = Request.Body)
             {
                 using (var readStream = new StreamReader(receiveStream))
                 {
-                    var call = XmlHelper.XmlDeserializeFromString<MethodCall>(readStream.ReadToEnd());
+                    var call = XmlHelper.DeserializeFromString<MethodCall>(readStream.ReadToEnd());
 
                     switch (call.methodName)
                     {
                         case "system.listMethods":
                             {
-                                return new MethodResponse()
+                                return new ContentResult()
                                 {
-                                    Params = new Params()
+                                    Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
                                     {
-                                        Param = new Param()
+                                        Params = new Params()
                                         {
-                                            Value = new Value()
+                                            Param = new Param()
                                             {
-                                                Array = new Array()
+                                                Value = new Value()
                                                 {
-                                                    Data = new Data()
+                                                    Array = new Array()
                                                     {
-                                                        Value = new List<string>() {
+                                                        Data = new Data()
+                                                        {
+                                                            Value = new [] {
                                                             "log.add_record",
                                                             "log.check_dup",
                                                             "log.get_record",
                                                             "system.listMethods",
                                                             "system.methodHelp",
-                                                            "system.multicall"
-                                                              }
+                                                            "system.multicall" }
+                                                        }
                                                     }
                                                 }
                                             }
                                         }
-                                    }
+                                    }),
+                                    ContentType = MediaTypeNames.Text.Xml,
+                                    StatusCode = 200
                                 };
                             }
 
@@ -59,79 +61,88 @@ namespace SQ7MRU.FLLog.Controllers
                                 {
                                     case "log.add_record":
                                         {
-                                            return new MethodResponse()
+                                            return new ContentResult()
                                             {
-                                                Params = new Params()
+                                                Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
                                                 {
-                                                    Param = new Param()
+                                                    Params = new Params()
                                                     {
-                                                        Value = new Value()
+                                                        Param = new Param()
                                                         {
-                                                            Array = new Array()
+                                                            Value = new Value()
                                                             {
-                                                                Data = new Data()
+                                                                Array = new Array()
                                                                 {
-                                                                    Value = new List<string>()
+                                                                    Data = new Data()
                                                                     {
-                                                                        "log.add_record ADIF RECORD"
+                                                                        Value = new[]
+                                                                        {"log.add_record ADIF RECORD"}
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
+                                                }),
+                                                ContentType = MediaTypeNames.Text.Xml,
+                                                StatusCode = 200
                                             };
                                         }
 
                                     case "log.check_dup":
                                         {
-                                            return new MethodResponse()
+                                            return new ContentResult()
                                             {
-                                                Params = new Params()
+                                                Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
                                                 {
-                                                    Param = new Param()
+                                                    Params = new Params()
                                                     {
-                                                        Value = new Value()
+                                                        Param = new Param()
                                                         {
-                                                            Array = new Array()
+                                                            Value = new Value()
                                                             {
-                                                                Data = new Data()
+                                                                Array = new Array()
                                                                 {
-                                                                    Value = new List<string>()
+                                                                    Data = new Data()
                                                                     {
-                                                                        "log.check_dup CALL, MODE(0), TIME_SPAN(0), FREQ_HZ(0), STATE(0), XCHG_IN(0)"
+                                                                        Value = new[]
+                                                                        {"log.check_dup CALL, MODE(0), TIME_SPAN(0), FREQ_HZ(0), STATE(0), XCHG_IN(0)"}
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
+                                                }),
+                                                ContentType = MediaTypeNames.Text.Xml,
+                                                StatusCode = 200
                                             };
                                         }
 
                                     case "log.get_record":
                                         {
-                                            return new MethodResponse()
+                                            return new ContentResult()
                                             {
-                                                Params = new Params()
+                                                Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
                                                 {
-                                                    Param = new Param()
+                                                    Params = new Params()
                                                     {
-                                                        Value = new Value()
+                                                        Param = new Param()
                                                         {
-                                                            Array = new Array()
+                                                            Value = new Value()
                                                             {
-                                                                Data = new Data()
+                                                                Array = new Array()
                                                                 {
-                                                                    Value = new List<string>()
+                                                                    Data = new Data()
                                                                     {
-                                                                        "log.get_record CALL"
+                                                                        Value = new[]
+                                                                        {"log.get_record CALL"}
                                                                     }
                                                                 }
                                                             }
                                                         }
                                                     }
-                                                }
+                                                }),
+                                                ContentType = MediaTypeNames.Text.Xml,
+                                                StatusCode = 200
                                             };
                                         }
 
