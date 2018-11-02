@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using SQ7MRU.FLLog.Model;
 using SQ7MRU.FLLog.Requests;
+using SQ7MRU.Utils;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -210,6 +212,62 @@ namespace SQ7MRU.FLLog.Controllers
                                                         }
                                                     }
                                                 }
+                                            }
+                                        }
+                                    }),
+                                    ContentType = MediaTypeNames.Text.Xml,
+                                    StatusCode = 200
+                                };
+                            }
+                        #endregion
+
+                        #region log.get_record
+                        ///"log.get_record CALL"
+                        case "log.get_record":
+                            {
+
+                                return new ContentResult()
+                                {
+                                    Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
+                                    {
+                                        Params = new Params()
+                                        {
+                                            Param = new Param()
+                                            {
+                                                Value = new Value()
+                                                {
+                                                    Array = new Array()
+                                                    {
+                                                        Data = new Data()
+                                                        {
+                                                            Value = new[] { client.GetRecord(call.@params[0]?.value) }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }),
+                                    ContentType = MediaTypeNames.Text.Xml,
+                                    StatusCode = 200
+                                };
+                            }
+                        #endregion
+
+                        #region log.add_record
+                        ///"log.add_record ADIF Record"
+                        case "log.add_record":
+                            {
+                                client.AddRecord(XmlHelper.ConvertToAdifRow(call.@params[0]?.value));
+
+                                return new ContentResult()
+                                {
+                                    Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
+                                    {
+                                        Params = new Params()
+                                        {
+                                            Param = new Param()
+                                            {
+                                                Value = new Value()
                                             }
                                         }
                                     }),

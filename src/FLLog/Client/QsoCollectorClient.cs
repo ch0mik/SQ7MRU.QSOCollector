@@ -2,6 +2,7 @@
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using SQ7MRU.FLLog.Requests;
+using SQ7MRU.Utils;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
@@ -31,8 +32,10 @@ namespace SQ7MRU.FLLog
         public bool CheckDup(CheckDupRequest checkDupRequest)
         {
             using (HttpClient httpClient = new HttpClient()
-            {   BaseAddress = new Uri(this.config.BaseUrl),
-                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", GenerateToken()) } })
+            {
+                BaseAddress = new Uri(this.config.BaseUrl),
+                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", GenerateToken()) }
+            })
             {
                 string action = $"restricted/stations/{config.StationId}/check_dup";
                 Task.Run(async () =>
@@ -49,6 +52,72 @@ namespace SQ7MRU.FLLog
                     }
                 }).GetAwaiter().GetResult();
                 return false;
+            }
+        }
+
+        /// <summary>
+        /// Get ADIF Record
+        /// POST:stations/{stationId}/get_record
+        /// </summary>
+        /// <param name="checkDupRequest"></param>
+        /// <returns></returns>
+        public string GetRecord(string callSign)
+        {
+            string response = "NO_RECORD";
+
+            using (HttpClient httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri(this.config.BaseUrl),
+                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", GenerateToken()) }
+            })
+            {
+                string action = $"restricted/stations/{config.StationId}/get_record";
+
+                try
+                {
+                    Task.Run(async () =>
+                    {
+                        HttpResponseMessage responseMessage = await httpClient.PostAsync(action, new StringContent($"\"{callSign}\"", Encoding.UTF8, "application/json"));
+
+                        if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            AdifRow record = JsonConvert.DeserializeObject<AdifRow>(responseMessage.Content.ReadAsStringAsync().Result);
+                            response = AdifHelper.ConvertToString(record);
+                        }
+                        else
+                        {
+                            throw new Exception($"{Path.Combine(httpClient.BaseAddress.AbsoluteUri, action)} returned {responseMessage.StatusCode}");
+                        }
+                    }).GetAwaiter().GetResult();
+                }
+                catch (Exception exc)
+                {
+                    return exc.Message;
+                }
+            }
+            return response;
+        }
+
+        /// <summary>
+        /// Check QSO Duplicates
+        /// /restricted/stations/{stationId}/insert/adif/{minutesAccept}
+        /// </summary>
+        /// <param name="checkDupRequest"></param>
+        /// <returns></returns>
+        public void AddRecord(string record)
+        {
+            using (HttpClient httpClient = new HttpClient()
+            {
+                BaseAddress = new Uri(this.config.BaseUrl),
+                DefaultRequestHeaders = { Authorization = new AuthenticationHeaderValue("Bearer", GenerateToken()) }
+            })
+            {
+                string action = $"restricted/stations/{config.StationId}/insert/adif/10";
+
+                Task.Run(async () =>
+                {
+                    var response = await httpClient.PostAsync(action, new StringContent(record, Encoding.UTF8, "application/json"));
+                }).GetAwaiter().GetResult();
             }
         }
 

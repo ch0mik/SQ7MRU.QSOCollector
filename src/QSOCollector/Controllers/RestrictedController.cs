@@ -324,6 +324,19 @@ namespace SQ7MRU.QSOCollector.Controllers
             return (duplicates.Length > 0);
         }
 
+        /// <summary>
+        /// Request record if it exists else return "NO_RECORD"
+        /// </summary>
+        /// <returns>Returns ADIF record</returns>
+        // POST: restricted/stations/1/get_record
+        [HttpPost("stations/{stationId}/get_record")]
+        public AdifRow GetRecord([FromRoute] int stationId, [FromBody] string callSign)
+        {
+            return (from l in _context.Log
+                    where l.CALL == callSign
+                    select l)?.OrderByDescending(x => x.QSO_DATE)?.First();
+        }
+
         #endregion
 
     }
