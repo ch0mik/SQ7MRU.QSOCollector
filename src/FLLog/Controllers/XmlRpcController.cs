@@ -194,27 +194,7 @@ namespace SQ7MRU.FLLog.Controllers
 
                                 return new ContentResult()
                                 {
-                                    Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
-                                    {
-                                        Params = new Params()
-                                        {
-                                            Param = new Param()
-                                            {
-                                                Value = new Value()
-                                                {
-                                                    Array = new Array()
-                                                    {
-                                                        Data = new Data()
-                                                        {
-                                                            Value = new[] {
-                                                                client.CheckDup(req).ToString()
-                                                            }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }),
+                                    Content = $"<?xml version=\"1.0\"?><methodResponse><params><param><value>{client.CheckDup(req).ToString().ToLower()}</value></ param></params></ methodResponse>",
                                     ContentType = MediaTypeNames.Text.Xml,
                                     StatusCode = 200
                                 };
@@ -228,25 +208,7 @@ namespace SQ7MRU.FLLog.Controllers
 
                                 return new ContentResult()
                                 {
-                                    Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
-                                    {
-                                        Params = new Params()
-                                        {
-                                            Param = new Param()
-                                            {
-                                                Value = new Value()
-                                                {
-                                                    Array = new Array()
-                                                    {
-                                                        Data = new Data()
-                                                        {
-                                                            Value = new[] { client.GetRecord(call.@params[0]?.value) }
-                                                        }
-                                                    }
-                                                }
-                                            }
-                                        }
-                                    }),
+                                    Content = $"<?xml version=\"1.0\"?><methodResponse><params><param><value>{client.GetRecord(call.@params[0]?.value)}</value></param></params></methodResponse>",
                                     ContentType = MediaTypeNames.Text.Xml,
                                     StatusCode = 200
                                 };
@@ -261,16 +223,7 @@ namespace SQ7MRU.FLLog.Controllers
 
                                 return new ContentResult()
                                 {
-                                    Content = XmlHelper.SerializeObject<MethodResponse>(new MethodResponse()
-                                    {
-                                        Params = new Params()
-                                        {
-                                            Param = new Param()
-                                            {
-                                                Value = new Value()
-                                            }
-                                        }
-                                    }),
+                                    Content = "<?xml version=\"1.0\"?><methodResponse><params><param><value></value></param></params></methodResponse>",
                                     ContentType = MediaTypeNames.Text.Xml,
                                     StatusCode = 200
                                 };

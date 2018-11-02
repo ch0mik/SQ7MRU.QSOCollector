@@ -28,7 +28,7 @@ namespace SQ7MRU.FLLog.Model
     public class Param
     {
         [XmlElement(ElementName = "value")]
-        public Value Value { get; set; }
+        public virtual Value Value { get; set; }
     }
 
     [XmlRoot(ElementName = "params")]

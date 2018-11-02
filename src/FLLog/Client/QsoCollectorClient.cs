@@ -38,19 +38,23 @@ namespace SQ7MRU.FLLog
             })
             {
                 string action = $"restricted/stations/{config.StationId}/check_dup";
-                Task.Run(async () =>
+                try
                 {
-                    HttpResponseMessage responseMessage = await httpClient.PostAsync(action, new StringContent(JsonConvert.SerializeObject(checkDupRequest), Encoding.UTF8, "application/json"));
+                    Task.Run(async () =>
+                    {
+                        HttpResponseMessage responseMessage = await httpClient.PostAsync(action, new StringContent(JsonConvert.SerializeObject(checkDupRequest), Encoding.UTF8, "application/json"));
 
-                    if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
-                    {
-                        return JsonConvert.DeserializeObject<bool>(responseMessage.Content.ReadAsStringAsync().Result);
-                    }
-                    else
-                    {
-                        throw new Exception($"{Path.Combine(httpClient.BaseAddress.AbsoluteUri, action)} returned {responseMessage.StatusCode}");
-                    }
-                }).GetAwaiter().GetResult();
+                        if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                        {
+                            return JsonConvert.DeserializeObject<bool>(responseMessage.Content.ReadAsStringAsync().Result);
+                        }
+                        else
+                        {
+                            throw new Exception($"{Path.Combine(httpClient.BaseAddress.AbsoluteUri, action)} returned {responseMessage.StatusCode}");
+                        }
+                    }).GetAwaiter().GetResult();
+                }
+                catch { }
                 return false;
             }
         }
@@ -59,7 +63,7 @@ namespace SQ7MRU.FLLog
         /// Get ADIF Record
         /// POST:stations/{stationId}/get_record
         /// </summary>
-        /// <param name="checkDupRequest"></param>
+        /// <param name="callSign"></param>
         /// <returns></returns>
         public string GetRecord(string callSign)
         {
@@ -90,20 +94,16 @@ namespace SQ7MRU.FLLog
                         }
                     }).GetAwaiter().GetResult();
                 }
-                catch (Exception exc)
-                {
-                    return exc.Message;
-                }
+                catch { }
             }
             return response;
         }
 
         /// <summary>
-        /// Check QSO Duplicates
+        /// Insert QSO
         /// /restricted/stations/{stationId}/insert/adif/{minutesAccept}
         /// </summary>
-        /// <param name="checkDupRequest"></param>
-        /// <returns></returns>
+        /// <param name="record"></param>
         public void AddRecord(string record)
         {
             using (HttpClient httpClient = new HttpClient()
@@ -128,7 +128,6 @@ namespace SQ7MRU.FLLog
             SecurityToken securityToken = new JwtSecurityToken(
                 issuer: config.BaseUrl,
                 claims: new[] {
-                  new Claim(JwtRegisteredClaimNames.Website, config.BaseUrl),
                   new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()) },
                 expires: DateTime.Now.AddHours(1),
                 audience: config.BaseUrl,

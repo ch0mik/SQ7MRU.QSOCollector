@@ -19,6 +19,7 @@ namespace SQ7MRU.FLLog
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
+                .UseKestrel(opts => opts.Limits.MaxConcurrentConnections = 1)
                 .UseStartup<Startup>();
     }
 }
