@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using SQ7MRU.FlLog.Requests;
+using SQ7MRU.FLLog.Requests;
 using SQ7MRU.QSOCollector.Helpers;
 using SQ7MRU.Utils;
 using System;
@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 namespace SQ7MRU.QSOCollector.Controllers
 {
     [Route("restricted")]
-    //ToDo : [Authorize]
+    [Authorize]
     [ApiController]
     public class RestrictedController : ControllerBase
     {

@@ -1,5 +1,5 @@
 ﻿using Newtonsoft.Json;
-using SQ7MRU.FlLog.Requests;
+using SQ7MRU.FLLog.Requests;
 using SQ7MRU.Utils;
 using System;
 using System.Collections.Generic;

@@ -24,8 +24,12 @@ namespace SQ7MRU.QSOCollector
 
             _logger = loggerFactory.CreateLogger(nameof(QSOColletorContext));
             _logger.LogInformation($"Initialize {nameof(QSOColletorContext)}");
-
             Database.EnsureCreated();
+        }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
         }
 
         #region Helpers

@@ -1,5 +1,5 @@
 ﻿
-namespace SQ7MRU.FlLog.Requests
+namespace SQ7MRU.FLLog.Requests
 {
     public class CheckDupRequest
     {
@@ -9,6 +9,5 @@ namespace SQ7MRU.FlLog.Requests
         public string Freq { get; set; }
         public string State { get; set; }
         public string XchgIn { get; set; } 
-        
     }
 }
