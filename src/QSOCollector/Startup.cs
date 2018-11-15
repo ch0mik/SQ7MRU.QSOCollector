@@ -11,7 +11,9 @@ using Microsoft.IdentityModel.Tokens;
 using SQ7MRU.QSOCollector.Services.EQSL;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -55,13 +57,9 @@ namespace SQ7MRU.QSOCollector
                         License = new License() { Url = "https://github.com/ch0mik/SQ7MRU.QSOCollector/blob/master/LICENSE", Name = "Apache License v2.0" }
                     });
 
-                    c.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                    {
-                        Description = "JWT Authorization header using the Bearer scheme. Example: \"Authorization: Bearer {token}\"",
-                        Name = "Authorization",
-                        In = "header",
-                        Type = "apiKey"
-                    });
+                    c.AddSecurityDefinition("Bearer", new ApiKeyScheme { In = "header", Description = "Please enter JWT with Bearer into field", Name = "Authorization", Type = "apiKey" });
+                    c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {{ "Bearer", Enumerable.Empty<string>() },});
+
                 });
             }
 
