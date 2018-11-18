@@ -1,11 +1,13 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
+using SQ7MRU.FLLog.Model;
 using SQ7MRU.FLLog.Requests;
 using SQ7MRU.Utils;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.IO;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Security.Claims;
@@ -44,7 +46,7 @@ namespace SQ7MRU.FLLog
                     {
                         HttpResponseMessage responseMessage = await httpClient.PostAsync(action, new StringContent(JsonConvert.SerializeObject(checkDupRequest), Encoding.UTF8, "application/json"));
 
-                        if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                        if (responseMessage.StatusCode == HttpStatusCode.OK)
                         {
                             return JsonConvert.DeserializeObject<bool>(responseMessage.Content.ReadAsStringAsync().Result);
                         }
@@ -83,7 +85,7 @@ namespace SQ7MRU.FLLog
                     {
                         HttpResponseMessage responseMessage = await httpClient.PostAsync(action, new StringContent($"\"{callSign}\"", Encoding.UTF8, "application/json"));
 
-                        if (responseMessage.StatusCode == System.Net.HttpStatusCode.OK)
+                        if (responseMessage.StatusCode == HttpStatusCode.OK)
                         {
                             AdifRow record = JsonConvert.DeserializeObject<AdifRow>(responseMessage.Content.ReadAsStringAsync().Result);
                             response = AdifHelper.ConvertToString(record);
@@ -104,8 +106,10 @@ namespace SQ7MRU.FLLog
         /// /restricted/stations/{stationId}/insert/adif/{minutesAccept}
         /// </summary>
         /// <param name="record"></param>
-        public void AddRecord(string record)
+        public int AddRecord(string record)
         {
+            int QsoID = -1;
+
             using (HttpClient httpClient = new HttpClient()
             {
                 BaseAddress = new Uri(this.config.BaseUrl),
@@ -117,7 +121,15 @@ namespace SQ7MRU.FLLog
                 Task.Run(async () =>
                 {
                     var response = await httpClient.PostAsync(action, new StringContent(record, Encoding.UTF8, "application/json"));
+
+                    if (response.StatusCode == System.Net.HttpStatusCode.Created || response.StatusCode == System.Net.HttpStatusCode.OK)
+                    {
+                        QsoID = JsonConvert.DeserializeObject<Qso>(response.Content.ReadAsStringAsync().Result).QsoId;
+                    }
+
                 }).GetAwaiter().GetResult();
+
+                return QsoID;
             }
         }
 

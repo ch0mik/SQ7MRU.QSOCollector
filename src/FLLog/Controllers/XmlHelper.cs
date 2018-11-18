@@ -8,6 +8,8 @@ using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Xml.Serialization;
+using System.Security.Cryptography;
+using System;
 
 namespace SQ7MRU.FLLog.Controllers
 {
@@ -93,6 +95,15 @@ namespace SQ7MRU.FLLog.Controllers
             }
 
             return JsonConvert.SerializeObject(dic);
+        }
+
+        public static string GetSHA1(string s)
+        {
+            using (var sha1 = SHA1.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(s);
+                return BitConverter.ToString(sha1.ComputeHash(bytes))?.Replace("-","");
+            }
         }
     }
 }

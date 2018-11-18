@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using SQ7MRU.FLLog.Model;
 using SQ7MRU.FLLog.Requests;
@@ -15,10 +16,14 @@ namespace SQ7MRU.FLLog.Controllers
     public class XmlRpcController : ControllerBase
     {
         private readonly QsoCollectorClient client;
+        private readonly LocalBufferContext _context;
+        private readonly ILogger _logger;
 
-        public XmlRpcController(IConfiguration configuration)
+        public XmlRpcController(LocalBufferContext context, ILogger<XmlRpcController> logger, IConfiguration configuration)
         {
             client = new QsoCollectorClient(configuration);
+            _context = context;
+            _logger = logger;
         }
 
         [HttpPost]
@@ -29,7 +34,7 @@ namespace SQ7MRU.FLLog.Controllers
                 using (var readStream = new StreamReader(receiveStream))
                 {
                     var call = XmlHelper.DeserializeFromString<MethodCall>(readStream.ReadToEnd());
-
+                    _logger.LogTrace(JsonConvert.SerializeObject(call));
                     switch (call.methodName)
                     {
                         #region system.listMethods
@@ -219,8 +224,10 @@ namespace SQ7MRU.FLLog.Controllers
                         ///"log.add_record ADIF Record"
                         case "log.add_record":
                             {
-                                client.AddRecord(XmlHelper.ConvertToAdifRow(call.@params[0]?.value));
-
+                                string record = call.@params[0]?.value;
+                                string guid = _context.InsertRecord(record).ToString();
+                                _logger.LogInformation($"Inserted record {record} with Guid {guid}");
+                                
                                 return new ContentResult()
                                 {
                                     Content = "<?xml version=\"1.0\"?><methodResponse><params><param><value></value></param></params></methodResponse>",
