@@ -334,7 +334,7 @@ namespace SQ7MRU.QSOCollector.Controllers
         {
             return (from l in _context.Log
                     where l.CALL == callSign
-                    select l)?.OrderByDescending(x => x.QSO_DATE)?.First();
+                    select l)?.OrderByDescending(x => x.QSO_DATE)?.FirstOrDefault();
         }
 
         #endregion
