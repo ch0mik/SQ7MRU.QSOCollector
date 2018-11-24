@@ -42,7 +42,7 @@ namespace SQ7MRU.QSOCollector.Services.EQSL
                         {
                             try
                             {
-                                var QsosToSend = context.Log.Where(Q => Q.StationId == station.StationId && Q.EQSL_QSL_SENT == "N").ToArray();
+                                var QsosToSend = context.Log.Where(Q => Q.StationId == station.StationId && (Q.EQSL_QSL_SENT != "Y" || string.IsNullOrEmpty(Q.EQSL_QSL_SENT))).ToArray();
                                 var adif = AdifHelper.ExportAsADIF(QsosToSend);
                                 var c = new Uploader();
                                 if (c.UploadAdif(adif, station.Callsign, station.HamID))
@@ -53,6 +53,7 @@ namespace SQ7MRU.QSOCollector.Services.EQSL
                                         qso.EQSL_QSL_SENT = "Y";
                                         qso.EQSL_QSLSDATE = DateTime.UtcNow.ToString("yyyyMMdd");
                                         context.SaveChanges();
+                                        _logger.LogInformation($"{qso.CALL},{qso.QSO_DATE},{qso.MODE},{qso.BAND} has been uploaded to eQSL.cc");
                                     }
                                 }
                             }

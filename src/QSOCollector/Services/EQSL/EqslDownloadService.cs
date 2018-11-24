@@ -48,7 +48,7 @@ namespace SQ7MRU.QSOCollector.Services.EQSL
                                 {
                                     foreach (AdifRow r in ar.GetAdifRows())
                                     {
-                                        var founded = context.SearchDuplicates(station, r, 10).Where(Q => Q.EQSL_QSL_RCVD == "N").ToArray();
+                                        var founded = context.SearchDuplicates(station, r, 10).Where(Q => (Q.EQSL_QSL_RCVD != "Y" || string.IsNullOrEmpty(Q.EQSL_QSL_RCVD))).ToArray();
 
                                         //update QSOs
                                         foreach (Qso qso in founded)
@@ -64,6 +64,7 @@ namespace SQ7MRU.QSOCollector.Services.EQSL
                                                 qso.GRIDSQUARE = r.GRIDSQUARE;
                                             }
                                             context.SaveChanges();
+                                            _logger.LogInformation($"{qso.CALL},{qso.QSO_DATE},{qso.MODE},{qso.BAND} has been updated from eQSL.cc");
                                         }
                                     }
                                 }
