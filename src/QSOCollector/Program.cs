@@ -23,7 +23,8 @@ namespace SQ7MRU.QSOCollector
                             logging.AddConsole();
                             logging.AddDebug();
                         }
-                    }).ConfigureAppConfiguration((hostingContext, config) =>
+                    })
+                .ConfigureAppConfiguration((hostingContext, config) =>
                     {
                         IHostingEnvironment env = hostingContext.HostingEnvironment;
 
@@ -33,7 +34,11 @@ namespace SQ7MRU.QSOCollector
                         config.AddEnvironmentVariables();
                         config.AddCommandLine(args);
                     })
-                 .UseStartup<Startup>();
+                .UseKestrel(opts => 
+                    { 
+                    opts.Limits.MaxRequestBodySize = null;
+                    })  
+                .UseStartup<Startup>();
         
     }
 }

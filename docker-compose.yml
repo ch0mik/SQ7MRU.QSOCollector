@@ -1,7 +1,25 @@
 version: '3.1'
 
 services:
+  qsocollector:
+    hostname: qsocollector.local
+    restart: always
+    image: qsocollector:latest
+    ports:
+      - 80:80
+    volumes:
+      - qsocollector_data:/opt
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      SQLCONNSTR_DefaultConnection: "Data Source=/opt/QsoCollector.db"
+      QSOCOLLECTOR_JWT_SecretKey: "JwtSecretKey!"
+      QSOCOLLECTOR_EQSLCC_LOGIN: "yours login"
+      QSOCOLLECTOR_EQSLCC_PASSWORD: "yours password"
+      QSOCOLLECTOR_EQSLCC_IMG_PATH": "/opt/gallery/eqsl.cc/"
+      QSOCOLLECTOR_EQSLCC_JOB_INTERVAL: 1 #hours
+
   fllog:
+    hostname: fllog.local
     restart: always
     image: sq7mrufllog:latest
     ports:
@@ -10,9 +28,10 @@ services:
       - fllog_data:/opt
     environment:
       SQLCONNSTR_DefaultConnection: "Data Source=/opt/LocalBuffor.db"
-      FFLOG_BaseUrl: "http://qsocollector.local:44306"
+      FFLOG_BaseUrl: "http://qsocollector.local"
       FFLOG_StationId: "1"
-      FFLOG_JwtSecretKey: "JwtSecretKey"
+      FFLOG_JwtSecretKey: "JwtSecretKey!"
       
 volumes:
   fllog_data:
+  qsocollector_data:

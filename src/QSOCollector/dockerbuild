@@ -1,0 +1,5 @@
+dotnet restore
+dotnet publish -c Release -o ./app
+docker build -t qsocollector .
+docker save -o qsocollector.tar qsocollector
+rm -rf ./app
