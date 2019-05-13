@@ -1,0 +1,7 @@
+dotnet restore
+dotnet publish -c Release -o ./app
+docker pull microsoft/dotnet:2.1-aspnetcore-runtime
+docker build -t sq7mrufllog .
+docker save -o sq7mrufllog.tar sq7mrufllog
+
+

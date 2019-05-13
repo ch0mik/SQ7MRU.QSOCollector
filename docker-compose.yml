@@ -1,0 +1,18 @@
+version: '3.1'
+
+services:
+  fllog:
+    restart: always
+    image: sq7mrufllog:latest
+    ports:
+      - 8421:8421
+    volumes:
+      - fllog_data:/opt
+    environment:
+      SQLCONNSTR_DefaultConnection: "Data Source=/opt/LocalBuffor.db"
+      FFLOG_BaseUrl: "http://qsocollector.local:44306"
+      FFLOG_StationId: "1"
+      FFLOG_JwtSecretKey: "JwtSecretKey"
+      
+volumes:
+  fllog_data:

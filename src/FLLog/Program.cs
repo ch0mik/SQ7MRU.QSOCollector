@@ -1,4 +1,4 @@
-﻿using System;
+﻿    using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -19,7 +19,17 @@ namespace SQ7MRU.FLLog
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args) =>
             WebHost.CreateDefaultBuilder(args)
-                .UseKestrel(opts => opts.Limits.MaxConcurrentConnections = 1)
-                .UseStartup<Startup>();
+            .ConfigureAppConfiguration((builderContext, config) =>
+                {
+                var env = builderContext.HostingEnvironment;
+
+                config.SetBasePath(env.ContentRootPath);
+                config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+                config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+                config.AddEnvironmentVariables();
+
+                })
+            .UseKestrel(opts => opts.Limits.MaxConcurrentConnections = 1)
+            .UseStartup<Startup>();
     }
 }
